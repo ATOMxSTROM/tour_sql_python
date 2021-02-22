@@ -6,16 +6,22 @@ def fun():
     c=mydb.cursor()
     c.execute("create database tournament")
     c.execute('use tournament')
-    c.execute('create table tour(S.NO  int primary key,team_name varchar(10),represented_school varchar(20),location varchar(20),player_1 varchar(20),player_2 varchar(20),player_3 varchar(20),player_4 varchar(20),player_5 varchar(20),age varchar(10)')
-    c.execute('create table duplicate(S.NO  int primary key,team_name varchar(10),represented_school varchar(20),location varchar(20),player_1 varchar(20),player_2 varchar(20),player_3 varchar(20),player_4 varchar(20),player_5 varchar(20),age varchar(10)')
+    c.execute('create table tour(S_NO  int primary key,team_name varchar(10),represented_school varchar(20),location varchar(20),player_1 varchar(20),player_2 varchar(20),player_3 varchar(20),player_4 varchar(20),player_5 varchar(20),age varchar(10))')
+    c.execute('create table duplicate(S_NO int primary key,team_name varchar(10),represented_school varchar(20),location varchar(20),player_1 varchar(20),player_2 varchar(20),player_3 varchar(20),player_4 varchar(20),player_5 varchar(20),age varchar(10))')
+    c.close()
 def start():
+    mydb=mysql.connector.connect(host="localhost",user="root",passwd="29@2004@sriram")
+    c=mydb.cursor()
+    c.execute('use tournament')
     m=input('''enter 'm' if you want to access management part
-                    enter 'v' if you want to access viewer mode''')
+enter 'v' if you want to access viewer mode''')
     if m.lower()=='m':
         pw=input('enter the password to confrim that you are from managent')
         if pw=='123':
             n=int(input('enter the number of teams participating'))
+            add="insert into tour(S_NO,team_name,represented_school,location,player_1,player_2,player_3,player_4,player_5,age) values(i,team,represented_school,location,player_1,player_2,player_3,player_4,player_5,age)"
             for i in range(n):
+                j=i
                 team=input('enter the team name')
                 represented_school=input('enter the school name which the team is representing')
                 location=input('enter the location of the school')
@@ -25,9 +31,11 @@ def start():
                 player_4=input('enter the player 4 name')
                 player_5=input('enter the player 5 name')
                 age=input('enter the age category of the team')
-                c.execute('insert into tour values(i,team,represented_school,location,player_1,player_2,player_3,player_4,player_5,age)')
+                
+                c.execute(add)
                 #duplicate
-                c.execute('insert into duplicate values(i,team,represented_school,location,player_1,player_2,player_3,player_4,player_5,age)')
+                c.execute(add)
+                
             mydb.commit()
             s=input('''enter 1 for displaying the content
                         enter 2 for altering the table
