@@ -43,7 +43,6 @@ enter 'v' if you want to access viewer mode''')
             #c.execute(add,list1)
                 #duplicate
             #c.execute(add,list1)
-
             mydb.commit()
             s=int(input('''enter 1 for displaying the content
 enter 2 for altering the table
@@ -64,8 +63,8 @@ enter 5 to see the structure of the table'''))
                     q=int(input("enter 1 to increase the range\nenter 2 to change the name of the table"))
 
                     if q==1:
-                        c.execute('alter table tour modify(team_name varchar(20)')
-                        c.execute('alter table duplicate modify(team_name varchar(20)')
+                        c.execute('alter table tour modify team_name varchar(20)')
+                        c.execute('alter table duplicate modify team_name varchar(20)')
                     elif q==2:
                         nf=input('enter the new name of the table')
 
@@ -81,9 +80,9 @@ enter 5 to see the structure of the table'''))
                     q=int(input('enter 1 to increase the range\nenter 2 to change the name of the table'))
                     print('get int')
                     if q==1:
-                        c.execute('alter table tour modify(represented_school varchar(30)')
+                        c.execute('alter table tour modify represented_school varchar(30)')
 
-                        c.execute('alter table duplicate modify(represented_school varchar(30)')
+                        c.execute('alter table duplicate modify represented_school varchar(30)')
 
                         print('q is equal to 1  in  represented_school')
                     elif q==2:
@@ -101,8 +100,8 @@ enter 5 to see the structure of the table'''))
                     q=int(input('enter 1 to increase the range\nenter 2 to change the name of the table'))
 
                     if q==1:
-                        c.execute('alter table tour modify(team_name varchar(30)')
-                        c.execute('alter table duplicate modify(team_name varchar(30)')
+                        c.execute('alter table tour modify team_name varchar(30)')
+                        c.execute('alter table duplicate modify team_name varchar(30)')
 
                         print('the has be altered in location')
                     elif q==2:
@@ -111,61 +110,29 @@ enter 5 to see the structure of the table'''))
                         c.execute(f'alter table duplicate rename column "location" to {nf}')
 
             if s==3:
-                n8=int(input('enter the S.No of column which the change need to be done'))
-                x=input('''enter the column name , in which the updade need to be done :
+                Recid = int(input("Enter the Record's S_No: "))
+                colname = input('''enter the column name , in which the updade need to be done :
                             column name:player_1
                                         player_2
                                         player_3
                                         player_4
                                         player_5
-                                        age''')
-                if x=='player_1' or x=='1' or x=='player 1' or x=='pla 1':
-                    n7=input('enter the name to be changed')
-                    c.execute('update tour set player_1=n7 where S.NO==n8')
+                                        ''')
 
-                if x=='player_2' or x=='2' or x=='player 2' or x=='pla 2':
-                    n7=input('enter the name to be changed')
-                    c.execute('update tour set player_2=n7 where S.NO==n8')
+                dict = {"player1" : ("player_1" ,"1" ,"player 1" ,"pla 1") ,
+                 "player2" :("player_2","2" ,"player 2" ,"pla 2") ,
+                 'player3' : ('player_3','3','player 3','pla 3') ,
+                  "player4" :("player_4" ,"4" ,"player 4" ,"pla 4") ,
+                  'player5' : ('player_5','5','player 5','pla 5')}
 
-                if x=='player_3' or x=='3' or x=='player 3' or x=='pla 3':
-                    n7=input('enter the name to be changed')
-                    c.execute('update tour set player_3=n7 where S.NO==n8')
+                for i in list(dict.values()) :
+                    if colname in i:
+                        change = input('Enter the name to be changed ')
+                        c.execute("update tour set " + i[0] + " = %s where S_NO = %s" ,(change ,Recid))
+                        c.execute("update duplicate set " + i[0] + " = %s where S_NO = %s" ,(change ,Recid))
 
-                if x=='player_4' or x=='4' or x=='player 4' or x=='pla 4':
-                    n7=input('enter the name to be changed')
-                    c.execute('update tour set player_4=n7 where S.NO==n8')
-
-                if x=='player_5' or x=='5' or x=='player 5' or x=='pla 5':
-                    n7=input('enter the name to be changed')
-                    c.execute('update tour set player_5=n7 where S.NO==n8')
-
-                if x=='age' or x=='a' or x=='ag':
-                    n7=int(input('enter the age category to be changed'))
-                    c.execute('update tour set player_1=n7 where S.NO==n8')
-                #duplicate db
-                if x=='player_1' or x=='1' or x=='player 1' or x=='pla 1':
-                    n7=input('enter the name to be changed')
-                    c.execute('update duplicate set player_1=n7 where S.NO==n8')
-
-                if x=='player_2' or x=='2' or x=='player 2' or x=='pla 2':
-                    n7=input('enter the name to be changed')
-                    c.execute('update duplicate set player_2=n7 where S.NO==n8')
-
-                if x=='player_3' or x=='3' or x=='player 3' or x=='pla 3':
-                    n7=input('enter the name to be changed')
-                    c.execute('update duplicate set player_3=n7 where S.NO==n8')
-
-                if x=='player_4' or x=='4' or x=='player 4' or x=='pla 4':
-                    n7=input('enter the name to be changed')
-                    c.execute('update duplicate set player_4=n7 where S.NO==n8')
-
-                if x=='player_5' or x=='5' or x=='player 5' or x=='pla 5':
-                    n7=input('enter the name to be changed')
-                    c.execute('update duplicate set player_5=n7 where S.NO==n8')
-
-                if x=='age' or x=='a' or x=='ag':
-                    n7=int(input('enter the age category to be changed'))
-                    c.execute('update duplicate set player_1=n7 where S.NO==n8')
+                        print('job done')
+                        break
 
             if  s==4:
                 n0=int(input('enter the row number to delete the team from the list'))
