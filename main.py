@@ -1,5 +1,7 @@
 import mysql.connector
 from pyfiglet import Figlet
+from tabulate import tabulate
+
 mydb=mysql.connector.connect(host="localhost",user="root",passwd="29@2004@sriram")
 c=mydb.cursor()
 def fun():
@@ -15,7 +17,8 @@ def fun():
               player_3 varchar(20),\
               player_4 varchar(20),\
               player_5 varchar(20),\
-              age varchar(10))')
+              age varchar(10),\
+              score int)')
 
     c.execute('create table if not exists duplicate(S_NO int primary key,\
     team_name varchar(30),\
@@ -26,7 +29,8 @@ def fun():
     player_3 varchar(20),\
     player_4 varchar(20),\
     player_5 varchar(20),\
-    age varchar(10))')
+    age varchar(10),\
+    score int)')
 
 def start():
 
@@ -52,9 +56,10 @@ enter 'v' if you want to access viewer mode : ''')
                 player_4=input('enter the player 4 name : ')
                 player_5=input('enter the player 5 name : ')
                 age=input('enter the age category of the team : ')
+                score_val=int(input('enter the score of each teams : '))
                 print('')
-                c.execute("insert into tour values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(i,team,represented_school,location,player_1,player_2,player_3,player_4,player_5,age))
-                c.execute("insert into duplicate values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(i,team,represented_school,location,player_1,player_2,player_3,player_4,player_5,age))
+                c.execute("insert into tour values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(i,team,represented_school,location,player_1,player_2,player_3,player_4,player_5,age,score_val))
+
             mydb.commit()
             def fun():
                 s=int(input('''enter 1 for displaying the content
@@ -75,14 +80,13 @@ enter 4 to delete the row in the table : '''))
 
                         if q==1:
                             c.execute('alter table tour modify team_name varchar(40)')
-                            c.execute('alter table duplicate modify team_name varchar(40)')
+
                         elif q==2:
                             nf=input('enter the new name of the table : ')
 
                             print('nf in q2 of team name : ')
 
                             c.execute(f'alter table tour rename column team_name to {nf}')
-                            c.execute(f'alter table duplicate rename column team_name to {nf}')
 
                             print('comment executed on team')
 
@@ -93,13 +97,9 @@ enter 4 to delete the row in the table : '''))
                         if q==1:
                             c.execute('alter table tour modify represented_school varchar(40)')
 
-                            c.execute('alter table duplicate modify represented_school varchar(40)')
-
-
                         elif q==2:
                             nf=input('enter the new name of the table : ')
                             c.execute(f'alter table tour rename column "represented_school" to {nf}')
-                            c.execute(f'alter table duplicate rename column "represented_school" to {nf}')
 
                     elif n2=='location':
                         print('entered the location : ')
@@ -108,12 +108,11 @@ enter 4 to delete the row in the table : '''))
 
                         if q==1:
                             c.execute('alter table tour modify team_name varchar(30)')
-                            c.execute('alter table duplicate modify team_name varchar(30)')
+
 
                         elif q==2:
                             nf=input('enter the new name of the table : ')
                             c.execute(f'alter table tour rename column "location" to {nf}')
-                            c.execute(f'alter table duplicate rename column "location" to {nf}')
 
                 elif s==3:
                     Recid = int(input("Enter the Record's S_No : "))
@@ -128,13 +127,14 @@ column name:player_1
                      "player2" :("player_2","2" ,"player 2" ,"pla 2") ,
                      'player3' : ('player_3','3','player 3','pla 3') ,
                       "player4" :("player_4" ,"4" ,"player 4" ,"pla 4") ,
-                      'player5' : ('player_5','5','player 5','pla 5')}
+                      'player5' : ('player_5','5','player 5','pla 5'),
+                      'score_val':('score','val','scr')}
 
                     for i in list(dict.values()) :
                         if colname in i:
-                            change = input('Enter the name to be changed : ')
+                            change = input('Enter the value to be changed : ')
                             c.execute("update tour set " + i[0] + " = %s where S_NO = %s" ,(change ,Recid))
-                            c.execute("update duplicate set " + i[0] + " = %s where S_NO = %s" ,(change ,Recid))
+
                             break
 
                 elif  s==4:
@@ -142,7 +142,7 @@ column name:player_1
 
 
                     c.execute("delete from tour where S_NO= '{}'".format(deleted_row))
-                    c.execute("delete from duplicate where S_NO= '{}'".format(deleted_row))
+
 
                     print('job done')
 
@@ -162,7 +162,9 @@ column name:player_1
         if v.lower()=='yes' or v.lower()=='y':
             start()
     mydb.commit()
-    w=input('enter "yes" or "y" to continue to managent or viewer menu or press "no" or "n" to pass to next : ')
+
+
+    w=input('enter "yes" or "y" to continue to managent or press "no" or "n" to pass to next : ')
     if w.lower() in 'yes':
         fun()
     else:
@@ -172,46 +174,19 @@ column name:player_1
     if p=='v':
         start()
 def managment():
-    c.fetchall()
-    r=c.rowcount
-    while r !=1:
-        if r%2==0:
-            m=r//2
-            for i in range(m):
-                m=int(input('enter the team number who is participating first'))
-                m1=int(input('enter the team number who is participating second'))
-                print('Team 1 going to participate',m)
-                print('Team 2 going ot participate',m1)
-                k=int(input('winning team'))
-                k1=int(input('losing team'))
-                c.execute('delete from duplicate where S_NO="{}"'.format(k1))
-                c.fetchall()
-                r=c.rowcount
-        else:
-            if r==3:
-                m=int(input('enter the team number who is participating first'))
-                m1=int(input('enter the team number who is participating second'))
-                print('Team 1 going to participate',m)
-                print('Team 2 going ot participate',m1)
-                k=int(input('winning team'))
-                k1=int(input('losing team'))
-                c.execute('delete from duplicate where S_NO="{}"'.format(k1))
-                m=int(input('enter the team number who is participating first'))
-                m1=int(input('enter the team number who is participating second'))
-                print('Team 1 going to participate',m)
-                print('Team 2 going ot participate',m1)
-                k=int(input('winning team'))
-                k1=int(input('losing team'))
-                c.execute('delete from duplicate where S_NO="{}"'.format(k1))
-                break
-            d.commit()
-    c.execute('select*from duplicate')
+
+    c.execute('select max(score) from tour')
+
+
     for i in c:
-        print(i)
+        print('the maximum score is : ',i[0])
+
+    mydb.commit()
+
 fun()
 start()
 managment()
-l=input('enter "yes" if you want to view main table and the winner team : ')
+l=input('enter "yes" if you want to view main table : ')
 print('')
 if l.lower()=='yes' or l.lower()=='y':
     c.execute('select*from tour')
