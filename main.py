@@ -4,6 +4,7 @@ from tabulate import tabulate
 
 mydb=mysql.connector.connect(host="localhost",user="root",passwd="29@2004@sriram")
 c=mydb.cursor()
+c.execute('drop database if exists tournament')
 def fun():
     c.execute("CREATE DATABASE IF NOT EXISTS tournament")
     c.execute('use tournament')
@@ -150,11 +151,11 @@ column name:player_1
                     print('the enterd value is wrong!Please check the value you have entered')
             fun()
     elif m.lower()=='v':
-
-        c.execute('use tournament')
-        c.execute('select*from tour')
-        for i in c:
-            print(i)
+        def viewer():
+            c.execute('use tournament')
+            c.execute('select*from tour')
+            for i in c:
+                print(i)
 
     else:
         print("not a valid value , please check the variable you have entered")
@@ -163,16 +164,16 @@ column name:player_1
             start()
     mydb.commit()
 
-
-    w=input('enter "yes" or "y" to continue to managent or press "no" or "n" to pass to next : ')
-    if w.lower() in 'yes':
-        fun()
-    else:
-        print('you will be in next phase')
-        pass
+    while True:
+        w=input('enter "yes" or "y" to continue to managent or press "no" or "n" to pass to next : ')
+        if w.lower() in 'yes':
+            fun()
+        else:
+            print('you will be in next phase')
+            break
     p=input('enter "v" to get into viewer mode or "n" to get to next phase : ')
     if p=='v':
-        start()
+        viewer()
 def managment():
 
     c.execute('select max(score) from tour')
