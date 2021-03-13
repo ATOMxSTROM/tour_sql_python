@@ -1,6 +1,5 @@
 import mysql.connector
 from pyfiglet import Figlet
-from tabulate import tabulate
 
 mydb=mysql.connector.connect(host="localhost",user="root",passwd="29@2004@sriram")
 c=mydb.cursor()
